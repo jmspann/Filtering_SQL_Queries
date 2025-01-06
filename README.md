@@ -16,54 +16,58 @@ In this lab, we will further filter SQL queries to access specific information c
 
 <h2>Program Walk-Through:</h2>
 
-<h3>Filtering Using <em><strong>WHERE</em></h3>
+<h3>Filtering Using <em><strong>WHERE</em></strong></h3>
 
 <p align="center">
-We need to obtain information on employee devices so our team can update them. This information is located in the "machines" table in the "organization" database. We can access it by using the <em><strong>SELECT</strong></em> and <em><strong>FROM</strong></em> commands: <br/>
-<img src="https://i.imgur.com/LMEUEp1.png" height="100%" width="100%" alt="SQL Query"/>
+First, list all organization machines and their operating systems from the "machines" table, only highlighting the "device_id" and "operating_system" columns: <br/>
+<img src="https://i.imgur.com/MfPLwfJ.png" height="100%" width="100%" alt="Query Filtering"/>
 <br />
 <br />
-We only want to focus on the "device_id" and "email_client" columns from the table:  <br/>
-<img src="https://i.imgur.com/ConnInx.png" height="100%" width="100%" alt="SQL Query"/>
+Now, filter the table to list all the machines with the operating system of "OS 2" using the <em><strong>WHERE</strong></em> command:  <br/>
+<img src="https://i.imgur.com/NRXhvh1.png" height="100%" width="100%" alt="Query Filtering"/>
 <br />
 <br />
-Now we only want to return the "device_id", "operating_system", and "OS_patch_date" columns from the table: <br/>
-<img src="https://i.imgur.com/IZYQoRF.png" height="100%" width="100%" alt="SQL Query"/>
+Next, we will retrieve a list of all the employees in the Finance and Sales departments to obtain their office numbers: <br/>
+<img src="https://i.imgur.com/hLDotbI.png" height="100%" width="100%" alt="Query Filtering"/> <br/>
+<br />
+<img src="https://i.imgur.com/Tg6SlNK.png" height="100%" width="100%" alt="Query Filtering"/>
 <br />
 <br />
-Next, we need to analyze information from the "log_in_attempts" table for any unusual activity. We'll first investigate if any login attempts were outside of the expected areas (US, Canada, and Mexico) by pulling the "event_id" and "country" columns:  <br/>
-<img src="https://i.imgur.com/cXgSk9C.png" height="100%" width="100%" alt="SQL Query"/>
-<br />
-<br />
-Next, we'll check if any login attempts were made outside of working hours. We'll first pull the "username", "login_date", and "login_time" columns, followed by selecting all of the columns to get a whole picture of login attempt hours: <br/>
-<img src="https://i.imgur.com/TRqUqUi.png" height="100%" width="100%" alt="SQL Query"/> <br/>
-<br />
-<img src="https://i.imgur.com/0zHFiLK.png" height="100%" width="100%" alt="SQL Query"/>
-<br />
-<br />
-Now we will sequence the data according to the login date and time using the <em><strong>ORDER BY</strong></em> command: <br/>
-<img src="https://i.imgur.com/KGwhkAN.png" height="100%" width="100%" alt="SQL Query"/>
+A machine in 'South-109' has been identified as having an issue. In order to send the correct employee an alert, we must find which employee uses that machine. Focus on the "office" column of the "employees" table:  <br/>
+<img src="https://i.imgur.com/yYIcjOU.png" height="100%" width="100%" alt="Query Filtering"/>
 </p>
 <br />
 <br />
 
-<h3>Filtering with <em><strong>OPERATORS</em></h3>
+<h3>Filtering with <em><strong>OPERATORS</em></strong></h3>
 
 <p align="center">
-We need to identify which employees are using which machines. The data is located in the "machines" and "employees" tables. To access this, we will query the "machines" table and perform a join between it and the "employees" table using an <em><strong>INNER JOIN</strong></em> on their shared column "device_id":  <br/>
-<img src="https://i.imgur.com/CydFVYS.png" height="100%" width="100%" alt="SQL Joining"/>
+We need to ivestigate a recent security incident and must gather information on login attempts made after a certain date. The first step is to run a query on the "log_in_attempts" table for login attempts made after '2022-05-09':  <br/>
+<img src="https://i.imgur.com/sMO9Ka5.png" height="100%" width="100%" alt="Query Filtering"/>
 <br />
 <br />
-Now we must return information on all machines and the employees who have them by using <em><strong>LEFT JOIN</strong></em> to include all data from the first mentioned "machines" table. This query will also include any machines that are not assigned to an employee:  <br/>
-<img src="https://i.imgur.com/jzUnF2N.png" height="100%" width="100%" alt="SQL Joining"/>
+It was decided that we should also include '2022-05-09' in our query results as well:  <br/>
+<img src="https://i.imgur.com/u4Ut0pb.png" height="100%" width="100%" alt="Query Filtering"/>
 <br />
 <br />
-Next, we must return information of all employees and any machines that are assigned to them by using <em><strong>RIGHT JOIN</strong></em>, which includes all data from the second mentioned "employees" table. This includes any employees who may not have any machines assigned to them:  <br/>
-<img src="https://i.imgur.com/rmjIa5T.png" height="100%" width="100%" alt="SQL Joining"/>
+Now we need to narrow the focus of the search; login attempts made after '2022-05-11' shouldn't be included in the results. This can be acheived by using the <em><strong>BETWEEN</strong></em> and <em><strong>AND</strong></em> operators:  <br/>
+<img src="https://i.imgur.com/DUINaNB.png" height="100%" width="100%" alt="Query Filtering"/>
 <br />
 <br />
-Finally, we need to retrieve the information on all employees who have made login attempts by performing an <em><strong>INNER JOIN</strong></em> and linking them on their common "username" column:  <br/>
-<img src="https://i.imgur.com/fpPJKy1.png" height="100%" width="100%" alt="SQL Joining"/>
+Next, we need to investigate logins that were made before working hours. Typical work hours begin at 07:00:00:  <br/>
+<img src="https://i.imgur.com/mai4Fce.png" height="100%" width="100%" alt="Query Filtering"/>
+<br />
+<br />
+The previous query produced too many results, so we will narrow it by focusing on logins <em><strong>BETWEEN</strong></em> '06:00:00' <em><strong>AND</strong></em> '07:00:00':  <br/>
+<img src="https://i.imgur.com/cAo5KTY.png" height="100%" width="100%" alt="Query Filtering"/>
+<br />
+<br />
+Now, we want to investigate login attempts that have an event ID number greater than or equal to 100. We can do this by returning only the "event_id", "username", and "login_date" columns from the "log_in_attempts" table:  <br/>
+<img src="https://i.imgur.com/uocsRnF.png" height="100%" width="100%" alt="Query Filtering"/>
+<br />
+<br />
+Lastly, we want to narrow the results further by only focusing on event ID numbers <em><strong>BETWEEN</strong></em> 100 <em><strong>AND</strong></em> 150:  <br/>
+<img src="https://i.imgur.com/NgpS0Ms.png" height="100%" width="100%" alt="Query Filtering"/>
 </p>
 <br />
 <br />
@@ -71,24 +75,31 @@ Finally, we need to retrieve the information on all employees who have made logi
 <h3>Additional Filtering Commands</h3>
 
 <p align="center">
-We need to identify which employees are using which machines. The data is located in the "machines" and "employees" tables. To access this, we will query the "machines" table and perform a join between it and the "employees" table using an <em><strong>INNER JOIN</strong></em> on their shared column "device_id":  <br/>
-<img src="https://i.imgur.com/CydFVYS.png" height="100%" width="100%" alt="SQL Joining"/>
+We are now investigating failed login attempts that were made after business hours, which ends at '18:00:00'. We can search multiple conditions that need to be met by using the <em><strong>AND</strong></em> operator:  <br/>
+<img src="https://i.imgur.com/UzspmJ7.png" height="100%" width="100%" alt="Query Filtering"/>
 <br />
 <br />
-Now we must return information on all machines and the employees who have them by using <em><strong>LEFT JOIN</strong></em> to include all data from the first mentioned "machines" table. This query will also include any machines that are not assigned to an employee:  <br/>
-<img src="https://i.imgur.com/jzUnF2N.png" height="100%" width="100%" alt="SQL Joining"/>
+Next, we are investigating a suspicious event that occurred on '2022-05-09'. We want to query for all login attempts made that day and the day before, which can be done using the <em><strong>OR</strong></em> operator:  <br/>
+<img src="https://i.imgur.com/2tTyU4A.png" height="100%" width="100%" alt="Query Filtering"/>
 <br />
 <br />
-Next, we must return information of all employees and any machines that are assigned to them by using <em><strong>RIGHT JOIN</strong></em>, which includes all data from the second mentioned "employees" table. This includes any employees who may not have any machines assigned to them:  <br/>
-<img src="https://i.imgur.com/rmjIa5T.png" height="100%" width="100%" alt="SQL Joining"/>
+Now, we must focus on logins that did not originate in Mexico. We can do this by using the <em><strong>NOT</strong></em> and <em><strong>LIKE</strong></em> operators:  <br/>
+<img src="https://i.imgur.com/PNjoLLf.png" height="100%" width="100%" alt="Query Filtering"/>
 <br />
 <br />
-Finally, we need to retrieve the information on all employees who have made login attempts by performing an <em><strong>INNER JOIN</strong></em> and linking them on their common "username" column:  <br/>
-<img src="https://i.imgur.com/fpPJKy1.png" height="100%" width="100%" alt="SQL Joining"/>
+Next, we need to update employee machines and we need information on employees in the "Marketing" department who are located in all offices in the "East" building:  <br/>
+<img src="https://i.imgur.com/iQsvWUD.png" height="100%" width="100%" alt="Query Filtering"/>
+<br />
+<br />
+Now, we need to perform a different update to all the machines of all employees in the "Finance" and "Sales" department:  <br/>
+<img src="https://i.imgur.com/6ZNdxeA.png" height="100%" width="100%" alt="Query Filtering"/>
+<br />
+<br />
+Lastly, we need to make an update on all machines to employees who are not in IT (the update was already installed on employee computers in the IT department):  <br/>
+<img src="https://i.imgur.com/Cmi45sJ.png" height="100%" width="100%" alt="Query Filtering"/>
 </p>
 <br />
 <br />
-
 
 <!--
  ```diff
